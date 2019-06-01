@@ -38,7 +38,8 @@ public class Elf implements Runnable{
         }
     }
 
-    private void getHelped(){
+    private void getHelped() throws InterruptedException {
+        Thread.sleep(5);
         System.out.println("Elf " + index + " has been helped");
     }
 }

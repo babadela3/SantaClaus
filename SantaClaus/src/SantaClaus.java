@@ -24,11 +24,13 @@ public class SantaClaus implements Runnable{
         }
     }
 
-    private void prepSleigh() {
-        System.out.println("Santa Claus prepares sleigh");
+    private void prepSleigh() throws InterruptedException {
+        Thread.sleep(5);
+        System.out.println("Santa Claus prepares sleigh (" + Laponia.attachesCounter + ")");
     }
 
-    private void helpElves() {
+    private void helpElves() throws InterruptedException {
+        Thread.sleep(5);
         System.out.println("Santa Claus helps elves");
     }
 }

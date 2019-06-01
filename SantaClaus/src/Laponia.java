@@ -10,7 +10,7 @@ public class Laponia {
     static int elfCount;
     static int reindeerCount;
 
-    static AtomicInteger attachesCounter;
+    static int attachesCounter;
     static boolean stopAttaches;
     ;
     static Semaphore santaSemaphore;
@@ -27,7 +27,7 @@ public class Laponia {
     private static void init(){
         stopAttaches = false;
         elfCount = reindeerCount = 0;
-        attachesCounter = new AtomicInteger(1);
+        attachesCounter = 0;
 
         santaSemaphore = new Semaphore(0);
         elfSemaphore = new Semaphore(0);

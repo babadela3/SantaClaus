@@ -13,8 +13,8 @@ public class Reindeer implements Runnable{
                 Laponia.mutex.acquire();
                 Laponia.reindeerCount++;
                 if (Laponia.reindeerCount == 9) {
-                    System.out.println("Attach: " + Laponia.attachesCounter);
-                    if (Laponia.attachesCounter.addAndGet(1) == Laponia.totalAttaches + 1) {
+                    Laponia.attachesCounter++;
+                    if (Laponia.attachesCounter == Laponia.totalAttaches) {
                         Laponia.stopAttaches = true;
                     }
                     Laponia.santaSemaphore.release();

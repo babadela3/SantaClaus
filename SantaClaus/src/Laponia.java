@@ -1,7 +1,5 @@
-import com.sun.corba.se.impl.orbutil.concurrent.Mutex;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 public class Laponia {
@@ -9,54 +7,64 @@ public class Laponia {
     static int elfCount;
     static int reindeerCount;
 
-    static int elvesHelpCounter;
-    static int attachesCounter;
-    static boolean stopAttaches;
-    ;
-    static Semaphore santaSemaphore;
-    static Semaphore reindeerSemaphore;
-    static Semaphore elfSemaphore;
+    static Semaphore santaSem;
+    static Semaphore reindeerSem;
+    static Semaphore elfSem;
 
-    static Mutex mutex;
-    static Mutex elfMutex;
+    static Semaphore counterMutex;
+    static Semaphore elfMutex;
 
-    private static final int totalElves = 10;
-    private static final int totalReindeers = 9;
-    static final int totalAttaches = 30;
+    static volatile boolean endOfTheWorld = false;
+    static final Semaphore stopSem = new Semaphore(0);
+    static int stopCounter = 5;
+    static Random generator = new Random();
 
-    private static void init(){
-        stopAttaches = false;
-        elfCount = reindeerCount = 0;
-        attachesCounter = 0;
-        elvesHelpCounter = 0;
+    static int NUM_ELVES_IN_GROUP = 3;
+    static int NUM_REINDEERS_IN_GROUP = 9;
 
-        santaSemaphore = new Semaphore(0);
-        elfSemaphore = new Semaphore(0);
-        reindeerSemaphore = new Semaphore(0);
+    private static void init() {
+        elfCount = 0;
+        reindeerCount = 0;
 
-        mutex = new Mutex();
-        elfMutex = new Mutex();
+        santaSem = new Semaphore(0);
+        reindeerSem = new Semaphore(0);
+        elfSem = new Semaphore(0, true);
+
+        counterMutex = new Semaphore(1);
+        elfMutex = new Semaphore(1);
     }
 
     public static void main(String[] args) {
         try {
+            HashSet<Thread> threads = new HashSet<>();
+            threads.add(new Thread(new SantaClaus()));
+
+            int numOfElves = 10;
+            int numOfReindeers = 9;
+
+            for (int i = 0; i < numOfElves; i++) {
+                threads.add(new Thread(new Elf(i)));
+            }
+            for (int i = 0; i < numOfReindeers; i++) {
+                threads.add(new Thread(new Reindeer(i)));
+            }
+
             init();
-            List<Thread> threads = new ArrayList<>();
-            SantaClaus santaClaus = new SantaClaus();
-            threads.add(new Thread(santaClaus));
 
-            for (int i = 0; i < totalElves; i++) {
-                Elf elf = new Elf(i + 1);
-                threads.add(new Thread(elf));
+            for (Thread t : threads) {
+                t.start();
             }
 
-            for(int i = 0; i < totalReindeers; i++) {
-                Reindeer reindeer = new Reindeer(i + 1);
-                threads.add(new Thread(reindeer));
-            }
-
-            for(Thread thread : threads) {
-                thread.start();
+            try {
+                // wait until end of the world
+                stopSem.acquire();
+                System.out.println("THE END HAS COME!");
+                for (Thread t : threads)
+                    t.interrupt();
+                for (Thread t : threads)
+                    t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
         } catch (Exception e) {

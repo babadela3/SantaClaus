@@ -3,13 +3,13 @@ import com.sun.corba.se.impl.orbutil.concurrent.Mutex;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Laponia {
 
     static int elfCount;
     static int reindeerCount;
 
+    static int elvesHelpCounter;
     static int attachesCounter;
     static boolean stopAttaches;
     ;
@@ -22,12 +22,13 @@ public class Laponia {
 
     private static final int totalElves = 10;
     private static final int totalReindeers = 9;
-    static final int totalAttaches = 3;
+    static final int totalAttaches = 30;
 
     private static void init(){
         stopAttaches = false;
         elfCount = reindeerCount = 0;
         attachesCounter = 0;
+        elvesHelpCounter = 0;
 
         santaSemaphore = new Semaphore(0);
         elfSemaphore = new Semaphore(0);
@@ -45,12 +46,12 @@ public class Laponia {
             threads.add(new Thread(santaClaus));
 
             for (int i = 0; i < totalElves; i++) {
-                Elf elf = new Elf(i);
+                Elf elf = new Elf(i + 1);
                 threads.add(new Thread(elf));
             }
 
             for(int i = 0; i < totalReindeers; i++) {
-                Reindeer reindeer = new Reindeer(i);
+                Reindeer reindeer = new Reindeer(i + 1);
                 threads.add(new Thread(reindeer));
             }
 

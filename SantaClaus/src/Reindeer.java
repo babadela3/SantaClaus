@@ -29,7 +29,7 @@ public class Reindeer implements Runnable{
     }
 
     private synchronized void getHitched() throws InterruptedException {
-        Thread.sleep(5);
+        Thread.sleep(10);
         System.out.println("Reindeer " + index + " has been hitched");
     }
 }

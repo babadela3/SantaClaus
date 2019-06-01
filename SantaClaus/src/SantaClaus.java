@@ -13,6 +13,7 @@ public class SantaClaus implements Runnable{
                     Laponia.reindeerSemaphore.release(9);
                 } else {
                     if (Laponia.elfCount == 3) {
+                        Laponia.elvesHelpCounter++;
                         helpElves();
                         Laponia.elfSemaphore.release(3);
                     }
@@ -25,12 +26,12 @@ public class SantaClaus implements Runnable{
     }
 
     private void prepSleigh() throws InterruptedException {
-        Thread.sleep(5);
+        Thread.sleep(10);
         System.out.println("Santa Claus prepares sleigh (" + Laponia.attachesCounter + ")");
     }
 
     private void helpElves() throws InterruptedException {
         Thread.sleep(5);
-        System.out.println("Santa Claus helps elves");
+        System.out.println("Santa Claus helps elves (" + Laponia.elvesHelpCounter + ")");
     }
 }

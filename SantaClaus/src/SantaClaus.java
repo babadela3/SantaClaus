@@ -29,6 +29,6 @@ public class SantaClaus implements Runnable{
     }
 
     private void helpElves() {
-        System.out.println("Santa Claus help elves:");
+        System.out.println("Santa Claus helps elves");
     }
 }

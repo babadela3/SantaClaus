@@ -1,3 +1,4 @@
+import java.util.concurrent.TimeUnit;
 
 public class Elf implements Runnable{
 
@@ -20,8 +21,10 @@ public class Elf implements Runnable{
                     Laponia.elfMutex.release();
                 }
                 Laponia.mutex.release();
-                Laponia.elfSemaphore.acquire();
-                getHelped();
+                if(Laponia.elfSemaphore.tryAcquire(1, TimeUnit.SECONDS)) {
+                    getHelped();
+                }
+
                 Laponia.mutex.acquire();
                 Laponia.elfCount--;
                 if (Laponia.elfCount == 0) {

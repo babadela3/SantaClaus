@@ -1,6 +1,7 @@
 import com.sun.corba.se.impl.orbutil.concurrent.Mutex;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,7 +12,7 @@ public class Laponia {
 
     static AtomicInteger attachesCounter;
     static boolean stopAttaches;
-;
+    ;
     static Semaphore santaSemaphore;
     static Semaphore reindeerSemaphore;
     static Semaphore elfSemaphore;
@@ -21,7 +22,7 @@ public class Laponia {
 
     private static final int totalElves = 10;
     private static final int totalReindeers = 9;
-    static final int totalAttaches = 5;
+    static final int totalAttaches = 3;
 
     private static void init(){
         stopAttaches = false;
@@ -39,7 +40,7 @@ public class Laponia {
     public static void main(String[] args) {
         try {
             init();
-            HashSet<Thread> threads = new HashSet<>();
+            List<Thread> threads = new ArrayList<>();
             SantaClaus santaClaus = new SantaClaus();
             threads.add(new Thread(santaClaus));
 
@@ -56,13 +57,6 @@ public class Laponia {
             for(Thread thread : threads) {
                 thread.start();
             }
-
-            //TODO: Find a better way to stop the elves threads
-            while(!stopAttaches) {
-                Thread.sleep(100);
-            }
-
-            System.exit(0);
 
         } catch (Exception e) {
             e.printStackTrace();
